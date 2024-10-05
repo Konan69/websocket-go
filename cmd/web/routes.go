@@ -7,10 +7,13 @@ import (
 	"github.com/konan69/websocket-go/internal/handlers"
 )
 
-func routes() http.Handler{
+func routes() http.Handler {
 	mux := pat.New()
 	mux.Get("/", http.HandlerFunc((handlers.Home)))
 	mux.Get("/ws", http.HandlerFunc((handlers.WsEndpoint)))
+
+	fileServer := http.FileServer(http.Dir("./static/"))
+	mux.Get("/static/", http.StripPrefix("/static/", fileServer))
 
 	return mux
 }
